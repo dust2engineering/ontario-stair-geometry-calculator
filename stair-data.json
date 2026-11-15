@@ -1,0 +1,13 @@
+{
+  "code": "Ontario Building Code (2024), Division B, Subsection 3.4.6 (exit stairs) and 3.3.5",
+  "exit_stair_limits": {
+    "riser_min_mm": 125,
+    "riser_max_mm": 200,
+    "tread_run_min_mm": 250,
+    "min_width_between_handrails_mm": 1100
+  },
+  "comfort_guidance": "Design guidance (not a Code limit): 2 x riser + tread run between about 570 and 660 mm feels natural; stairs inside dwelling units follow Part 9 with different limits.",
+  "notes": [
+    "Risers and treads must be uniform within a flight; guards, handrails and landing sizes are separate requirements of Subsection 3.4.6."
+  ]
+}
