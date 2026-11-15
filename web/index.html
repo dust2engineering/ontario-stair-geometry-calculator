@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ontario Stair Geometry Calculator | Dust 2 Engineering Inc.</title>
+<style>
+:root{color-scheme:dark}
+body{background:#0e1116;color:#e6e9ee;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;margin:0;padding:24px;line-height:1.55}
+.wrap{max-width:860px;margin:0 auto}
+h1{font-size:1.55rem;line-height:1.25;margin:.2em 0 .1em}
+h2{font-size:1.15rem;margin-top:1.6em;color:#ffd479}
+.sub{color:#9fb0c3;margin:.2em 0 1.2em}
+.card{background:#161b22;border:1px solid #2b333f;border-radius:12px;padding:18px;margin:14px 0}
+label{display:block;margin:.7em 0 .25em;color:#c8d3e0;font-size:.95rem}
+input,select{width:100%;box-sizing:border-box;background:#0e1116;color:#e6e9ee;border:1px solid #39424f;border-radius:8px;padding:9px;font-size:1rem}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:640px){.row{grid-template-columns:1fr}}
+button{background:#f0a832;color:#14100a;border:0;border-radius:8px;padding:11px 18px;font-size:1rem;font-weight:600;cursor:pointer;margin-top:14px}
+button.ghost{background:#232a35;color:#e6e9ee}
+pre{background:#0a0d11;border:1px solid #2b333f;border-radius:10px;padding:14px;white-space:pre-wrap;word-break:break-word;font-size:.92rem}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+th,td{border:1px solid #2b333f;padding:6px 8px;text-align:left}
+th{background:#1b212b}
+.small{color:#9fb0c3;font-size:.88rem}
+a{color:#7cc4ff}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Ontario Stair Geometry Calculator</h1>
+<p class="sub">Floor-to-floor rise → riser count, equal riser height, tread count and total run for Part 3 exit stairs.</p>
+<div class="card">
+<div class="row"><div><label>Total rise, floor to floor (mm)</label><input id="total" type="number" value="3200" min="0"></div>
+<div><label>Tread run (mm)</label><input id="tread" type="number" value="280" min="0"></div></div>
+<button onclick="go()">Work out the stair</button>
+</div>
+<h2>Result</h2>
+<pre id="out">Your stair geometry will appear here.</pre>
+<p class="small">For Part 3 exit stairs the Ontario Building Code keeps risers between 125 and 200 mm and
+tread runs at 250 mm or more, with at least 1,100 mm clear between handrails. This tool picks the riser
+count that keeps every riser in range and equal — uneven risers are both a Code problem and a tripping
+hazard — then totals the run. Stairs inside a single dwelling unit are designed to Part 9 instead.</p>
+<p class="small">Free tool by <b>Dust 2 Engineering Inc.</b>, Mississauga, Ontario — building permit
+drawings for restaurants and small commercial projects across the GTA, stamped by an Ontario P.Eng.
+Flat rate $3,500–$5,000. Questions or a project to discuss: open an issue in this repository.</p>
+</div>
+<script>
+
+function go(){
+  const total = parseFloat(document.getElementById('total').value) || 0;
+  const tread = parseFloat(document.getElementById('tread').value) || 280;
+  let n = Math.ceil(total / 200);
+  let riser = total / n;
+  while (riser < 125 && n > 1){ n -= 1; riser = total / n; }
+  const treads = n - 1;
+  const runTotal = treads * tread;
+  let out = 'Total rise ' + total + ' mm -> ' + n + ' risers of ' + riser.toFixed(1) + ' mm each\n';
+  out += 'Riser check (125-200 mm): ' + (riser >= 125 && riser <= 200 ? 'OK' : 'OUT OF RANGE') + '\n';
+  out += 'Treads: ' + treads + ' x ' + tread + ' mm -> total run ' + runTotal.toFixed(0) + ' mm (' + (runTotal / 1000).toFixed(2) + ' m), excluding landings\n';
+  out += 'Tread check (min 250 mm for exit stairs): ' + (tread >= 250 ? 'OK' : 'TOO NARROW') + '\n';
+  out += 'Comfort guide 2R + T = ' + (2 * riser + tread).toFixed(0) + ' mm (guidance range about 570-660 mm)\n';
+  out += 'Exit stairs need at least 1,100 mm clear between handrails. Stairs inside a dwelling unit follow Part 9 instead.';
+  document.getElementById('out').textContent = out;
+}
+
+</script>
+</body>
+</html>
